@@ -1,15 +1,16 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 
+
 class Biome(models.Model):
     BIOMES_CHOICES = [
-        ('TU', 'Tundra'),
-        ('TA', 'Taiga'),
-        ('GR', 'Grassland'),
-        ('TE', 'Temperate'),
-        ('DE', 'Desert'),
-        ('TR', 'Tropical'),
-        ('AQ', 'Aquatic'),
+        ("TU", "Tundra"),
+        ("TA", "Taiga"),
+        ("GR", "Grassland"),
+        ("TE", "Temperate"),
+        ("DE", "Desert"),
+        ("TR", "Tropical"),
+        ("AQ", "Aquatic"),
     ]
 
     name = models.CharField(max_length=50, choices=BIOMES_CHOICES)
@@ -20,12 +21,12 @@ class Biome(models.Model):
 
 class Continent(models.Model):
     CONTINENTS_CHOICES = [
-        ('EU', 'Europe'),
-        ('AS', 'Asia'),
-        ('AF', 'Africa'),
-        ('NA', 'North America'),
-        ('SA', 'South America'),
-        ('OC', 'Oceania'),
+        ("EU", "Europe"),
+        ("AS", "Asia"),
+        ("AF", "Africa"),
+        ("NA", "North America"),
+        ("SA", "South America"),
+        ("OC", "Oceania"),
     ]
 
     name = models.CharField(max_length=50, choices=CONTINENTS_CHOICES)
@@ -36,8 +37,8 @@ class Continent(models.Model):
 
 class Species(models.Model):
     TYPE_CHOICES = [
-        ('H', 'Habitat'),
-        ('E', 'Exhibit'),
+        ("H", "Habitat"),
+        ("E", "Exhibit"),
     ]
 
     name = models.CharField(max_length=100)
@@ -54,28 +55,29 @@ class Species(models.Model):
 
 class Animal(models.Model):
     GENDER_CHOICES = [
-        ('M', 'Male'),
-        ('F', 'Female'),
+        ("M", "Male"),
+        ("F", "Female"),
     ]
 
     APPEAL_MEDAL_CHOICES = [
-        ('G', 'Gold'),
-        ('S', 'Silver'),
-        ('B', 'Bronze'),
-        ('N', 'None'),
+        ("G", "Gold"),
+        ("S", "Silver"),
+        ("B", "Bronze"),
+        ("N", "None"),
     ]
 
     def gene_field():
-        return models.IntegerField(validators=[
-            MinValueValidator(0),
-            MaxValueValidator(100)
-        ])
+        return models.IntegerField(
+            validators=[MinValueValidator(0), MaxValueValidator(100)]
+        )
 
     species = models.ForeignKey(Species, on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
     appeal_rating = models.IntegerField(blank=True, null=True)
-    appeal_medal = models.CharField(max_length=1, choices=APPEAL_MEDAL_CHOICES, blank=True, null=True)
+    appeal_medal = models.CharField(
+        max_length=1, choices=APPEAL_MEDAL_CHOICES, blank=True, null=True
+    )
     size_gene = gene_field()
     longevity_gene = gene_field()
     fertility_gene = gene_field()
@@ -83,4 +85,3 @@ class Animal(models.Model):
 
     def __str__(self):
         return f"{self.name} ({self.species.name})"
-

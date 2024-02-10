@@ -6,47 +6,103 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('animal_collection', '0001_initial'),
+        ("animal_collection", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Biome',
+            name="Biome",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(choices=[('TU', 'Tundra'), ('TA', 'Taiga'), ('GR', 'Grassland'), ('TE', 'Temperate'), ('DE', 'Desert'), ('TR', 'Tropical'), ('AQ', 'Aquatic')], max_length=50)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "name",
+                    models.CharField(
+                        choices=[
+                            ("TU", "Tundra"),
+                            ("TA", "Taiga"),
+                            ("GR", "Grassland"),
+                            ("TE", "Temperate"),
+                            ("DE", "Desert"),
+                            ("TR", "Tropical"),
+                            ("AQ", "Aquatic"),
+                        ],
+                        max_length=50,
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Continent',
+            name="Continent",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(choices=[('EU', 'Europe'), ('AS', 'Asia'), ('AF', 'Africa'), ('NA', 'North America'), ('SA', 'South America'), ('OC', 'Oceania')], max_length=50)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "name",
+                    models.CharField(
+                        choices=[
+                            ("EU", "Europe"),
+                            ("AS", "Asia"),
+                            ("AF", "Africa"),
+                            ("NA", "North America"),
+                            ("SA", "South America"),
+                            ("OC", "Oceania"),
+                        ],
+                        max_length=50,
+                    ),
+                ),
             ],
         ),
         migrations.AddField(
-            model_name='animal',
-            name='appeal_medal',
-            field=models.CharField(blank=True, choices=[('G', 'Gold'), ('S', 'Silver'), ('B', 'Bronze'), ('N', 'None')], max_length=1, null=True),
+            model_name="animal",
+            name="appeal_medal",
+            field=models.CharField(
+                blank=True,
+                choices=[
+                    ("G", "Gold"),
+                    ("S", "Silver"),
+                    ("B", "Bronze"),
+                    ("N", "None"),
+                ],
+                max_length=1,
+                null=True,
+            ),
         ),
         migrations.AddField(
-            model_name='animal',
-            name='appeal_rating',
+            model_name="animal",
+            name="appeal_rating",
             field=models.IntegerField(blank=True, null=True),
         ),
         migrations.AddField(
-            model_name='species',
-            name='type',
-            field=models.CharField(choices=[('H', 'Habitat'), ('E', 'Exhibit')], default=('H', 'Habitat')),
+            model_name="species",
+            name="type",
+            field=models.CharField(
+                choices=[("H", "Habitat"), ("E", "Exhibit")],
+                default=("H", "Habitat"),
+            ),
         ),
         migrations.AddField(
-            model_name='species',
-            name='biomes',
-            field=models.ManyToManyField(blank=True, to='animal_collection.biome'),
+            model_name="species",
+            name="biomes",
+            field=models.ManyToManyField(blank=True, to="animal_collection.biome"),
         ),
         migrations.AddField(
-            model_name='species',
-            name='continents',
-            field=models.ManyToManyField(blank=True, to='animal_collection.continent'),
+            model_name="species",
+            name="continents",
+            field=models.ManyToManyField(blank=True, to="animal_collection.continent"),
         ),
     ]
