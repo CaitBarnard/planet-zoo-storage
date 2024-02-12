@@ -1,5 +1,8 @@
-from django.http import HttpResponse
+from rest_framework import viewsets
+from animal_collection.models import Animal
+from animal_collection.serializers import AnimalSerializer
 
 
-def index(request):
-    return HttpResponse("Hello, world. You're at the animal collection index.")
+class AnimalView(viewsets.ModelViewSet):
+    serializer_class = AnimalSerializer
+    queryset = Animal.objects.all()
