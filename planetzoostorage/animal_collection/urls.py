@@ -5,6 +5,7 @@ from django.urls import include, path
 from . import views
 
 router = routers.DefaultRouter()
+router.register(r"species", views.SpeciesView, "species")
 router.register(r"animals", views.AnimalView, "animal")
 
 urlpatterns = [
