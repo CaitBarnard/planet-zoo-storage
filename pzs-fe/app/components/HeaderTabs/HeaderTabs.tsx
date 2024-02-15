@@ -35,7 +35,7 @@ export function HeaderTabs() {
             }}
             value={tabValue}
             onChange={(value) =>
-              navigate(value === tabs.Home ? "/" : `/${value?.toLowerCase()}`)
+              navigate(value === tabs.Home ? "/" : `/${value}`)
             }
           >
             <Tabs.List>{items}</Tabs.List>
