@@ -15,10 +15,12 @@ import {
   IconChevronDown,
   IconChevronUp,
   IconSearch,
+  IconGenderFemale,
+  IconGenderMale,
 } from "@tabler/icons-react";
 import classes from "./TableSort.module.css";
 
-const columns = ["id", "species", "name"];
+const columns = ["id", "species", "name", "gender"];
 
 type RowData = {
   [K in (typeof columns)[number]]: string;
@@ -91,6 +93,7 @@ function mapObjectToRowData(dataObject: { [key: string]: any }): RowData[] {
     id: value.id.toString(),
     species: value.species.name,
     name: value.name,
+    gender: value.gender,
   }));
 }
 
@@ -126,11 +129,27 @@ export function TableSort({ dataObject }: TableSortProps) {
     );
   };
 
+  const renderGenderIcon = (gender: string) => {
+    const Icon = gender === "M" ? IconGenderMale : IconGenderFemale;
+    const color = gender === "M" ? "#00abfb" : "#ff5c8d";
+    return (
+      <Icon
+        style={{ width: rem(20), height: rem(20) }}
+        stroke={2}
+        color={color}
+      />
+    );
+  };
+
   const rows = sortedData.map((row) => (
     <Table.Tr key={row.id}>
-      {columns.map((column) => (
-        <Table.Td>{row[column]}</Table.Td>
-      ))}
+      {columns.map((column) =>
+        column === "gender" ? (
+          <Table.Td key={column}>{renderGenderIcon(row[column])}</Table.Td>
+        ) : (
+          <Table.Td key={column}>{row[column]}</Table.Td>
+        )
+      )}
     </Table.Tr>
   ));
 
@@ -149,11 +168,18 @@ export function TableSort({ dataObject }: TableSortProps) {
         onChange={handleSearchChange}
       />
       <Table
+        highlightOnHover
         horizontalSpacing="md"
         verticalSpacing="xs"
         miw={700}
         layout="fixed"
       >
+        <colgroup>
+          <col style={{ width: "10%" }} />
+          <col style={{ width: "40%" }} />
+          <col style={{ width: "40%" }} />
+          <col style={{ width: "10%" }} />
+        </colgroup>
         <Table.Tbody>
           <Table.Tr>
             {columns.map((column) => (
@@ -174,7 +200,7 @@ export function TableSort({ dataObject }: TableSortProps) {
             <Table.Tr>
               <Table.Td colSpan={columns.length}>
                 <Text fw={500} ta="center">
-                  No animals added yet
+                  No animals found
                 </Text>
               </Table.Td>
             </Table.Tr>
