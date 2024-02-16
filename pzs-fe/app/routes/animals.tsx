@@ -2,6 +2,7 @@ import type { MetaFunction } from "@remix-run/node";
 import { useEffect, useState } from "react";
 import { getAnimals } from "~/api";
 import Layout from "~/components/Layout";
+import { TableSort } from "~/components/TableSort/TableSort";
 
 export const meta: MetaFunction = () => {
   return [
@@ -11,7 +12,7 @@ export const meta: MetaFunction = () => {
 };
 
 export default function Animals() {
-  const [data, setData] = useState(null);
+  const [data, setData] = useState(Object);
 
   useEffect(() => {
     getAnimals().then((data) => {
@@ -21,16 +22,7 @@ export default function Animals() {
 
   return (
     <Layout>
-      <div>
-        <h1>Data:</h1>
-        {data &&
-          Object.keys(data || {}).map((key) => (
-            <div key={key}>
-              <h2>{key}</h2>
-              <pre>{JSON.stringify(data[key], null, 2)}</pre>
-            </div>
-          ))}
-      </div>
+      <TableSort dataObject={data}/>
     </Layout>
   );
 }
