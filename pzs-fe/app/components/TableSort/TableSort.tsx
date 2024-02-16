@@ -83,7 +83,7 @@ function sortData(
 
 function mapObjectToRowData(dataObject: { [key: string]: any }): RowData[] {
   return Object.values(dataObject).map((value) => ({
-    id: value.id,
+    id: value.id.toString(),
     name: value.name,
     species: value.species.name,
   }));
@@ -94,31 +94,31 @@ interface TableSortProps {
 }
 
 export function TableSort({ dataObject }: TableSortProps) {
-  const data = [{}];
+  const column_number = 2;
   const [search, setSearch] = useState("");
+  const [mappedData, setMappedData] = useState<RowData[]>([]);
   const [sortedData, setSortedData] = useState<RowData[]>([]);
   const [sortBy, setSortBy] = useState<keyof RowData | null>(null);
   const [reverseSortDirection, setReverseSortDirection] = useState(false);
 
   useEffect(() => {
-    const mappedData = mapObjectToRowData(dataObject);
-    setSortedData(mappedData);
+    const newMappedData = mapObjectToRowData(dataObject);
+    setMappedData(newMappedData);
+    setSortedData(newMappedData);
   }, [dataObject]);
 
   const setSorting = (field: keyof RowData) => {
     const reversed = field === sortBy ? !reverseSortDirection : false;
     setReverseSortDirection(reversed);
     setSortBy(field);
-    setSortedData(
-      sortData(data as RowData[], { sortBy: field, reversed, search })
-    );
+    setSortedData(sortData(mappedData, { sortBy: field, reversed, search }));
   };
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.currentTarget;
     setSearch(value);
     setSortedData(
-      sortData(data as RowData[], {
+      sortData(mappedData, {
         sortBy,
         reversed: reverseSortDirection,
         search: value,
@@ -176,7 +176,7 @@ export function TableSort({ dataObject }: TableSortProps) {
             rows
           ) : (
             <Table.Tr>
-              <Table.Td colSpan={Object.keys(data[0]).length}>
+              <Table.Td colSpan={column_number}>
                 <Text fw={500} ta="center">
                   No animals added yet
                 </Text>
