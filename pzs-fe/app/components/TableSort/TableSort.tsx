@@ -18,16 +18,21 @@ import {
 } from "@tabler/icons-react";
 import classes from "./TableSort.module.css";
 
-interface RowData {
-  name: string;
-  species: string;
-}
+const columns = ["id", "species", "name"];
+
+type RowData = {
+  [K in (typeof columns)[number]]: string;
+};
 
 interface ThProps {
   children: React.ReactNode;
   reversed: boolean;
   sorted: boolean;
   onSort(): void;
+}
+
+interface TableSortProps {
+  dataObject: Object[];
 }
 
 function Th({ children, reversed, sorted, onSort }: ThProps) {
@@ -84,17 +89,12 @@ function sortData(
 function mapObjectToRowData(dataObject: { [key: string]: any }): RowData[] {
   return Object.values(dataObject).map((value) => ({
     id: value.id.toString(),
-    name: value.name,
     species: value.species.name,
+    name: value.name,
   }));
 }
 
-interface TableSortProps {
-  dataObject: Object[];
-}
-
 export function TableSort({ dataObject }: TableSortProps) {
-  const column_number = 2;
   const [search, setSearch] = useState("");
   const [mappedData, setMappedData] = useState<RowData[]>([]);
   const [sortedData, setSortedData] = useState<RowData[]>([]);
@@ -127,9 +127,10 @@ export function TableSort({ dataObject }: TableSortProps) {
   };
 
   const rows = sortedData.map((row) => (
-    <Table.Tr key={row.name}>
-      <Table.Td>{row.name}</Table.Td>
-      <Table.Td>{row.species}</Table.Td>
+    <Table.Tr key={row.id}>
+      {columns.map((column) => (
+        <Table.Td>{row[column]}</Table.Td>
+      ))}
     </Table.Tr>
   ));
 
@@ -155,20 +156,15 @@ export function TableSort({ dataObject }: TableSortProps) {
       >
         <Table.Tbody>
           <Table.Tr>
-            <Th
-              sorted={sortBy === "name"}
-              reversed={reverseSortDirection}
-              onSort={() => setSorting("name")}
-            >
-              Name
-            </Th>
-            <Th
-              sorted={sortBy === "species"}
-              reversed={reverseSortDirection}
-              onSort={() => setSorting("species")}
-            >
-              Species
-            </Th>
+            {columns.map((column) => (
+              <Th
+                sorted={sortBy === column}
+                reversed={reverseSortDirection}
+                onSort={() => setSorting(column)}
+              >
+                {column.charAt(0).toUpperCase() + column.slice(1)}
+              </Th>
+            ))}
           </Table.Tr>
         </Table.Tbody>
         <Table.Tbody>
@@ -176,7 +172,7 @@ export function TableSort({ dataObject }: TableSortProps) {
             rows
           ) : (
             <Table.Tr>
-              <Table.Td colSpan={column_number}>
+              <Table.Td colSpan={columns.length}>
                 <Text fw={500} ta="center">
                   No animals added yet
                 </Text>
